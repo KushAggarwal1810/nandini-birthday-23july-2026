@@ -1,6 +1,7 @@
 const scenes=[...document.querySelectorAll('.scene')];
 const introAudio=document.querySelector('#introSong');
 const audio=document.querySelector('#birthdaySong');
+const finaleAudio=document.querySelector('#finaleSong');
 const musicToggle=document.querySelector('#musicToggle');
 const progressFill=document.querySelector('#progressFill');
 const chapterCount=document.querySelector('#chapterCount');
@@ -18,7 +19,7 @@ function sizeCanvas(){const d=Math.min(devicePixelRatio||1,2);canvas.width=inner
 function burst(x=innerWidth/2,y=innerHeight/2,count=70,hearts=false){const colors=['#f8b5ca','#fff1db','#f1be69','#c64d79','#fff'];for(let i=0;i<count;i++)particles.push({x,y,vx:(Math.random()-.5)*10,vy:-3-Math.random()*7,g:.12+Math.random()*.1,life:65+Math.random()*50,size:3+Math.random()*7,color:colors[i%colors.length],heart:hearts&&i%3===0,rot:Math.random()*6})}
 function animate(){ctx.clearRect(0,0,innerWidth,innerHeight);particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;p.rot+=.12;ctx.save();ctx.globalAlpha=Math.min(1,p.life/40);ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;if(p.heart){ctx.font=`${p.size*3}px serif`;ctx.fillText('♡',-p.size,-p.size)}else ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.65);ctx.restore()});requestAnimationFrame(animate)}
 function showToast(message){toast.textContent=message;toast.classList.add('is-visible');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('is-visible'),2200)}
-function musicForScene(index=current){return index<2?introAudio:audio}
+function musicForScene(index=current){return index<2?introAudio:index===6?finaleAudio:audio}
 function startMusic(){const wanted=musicForScene();if(currentAudio!==wanted){currentAudio.pause();currentAudio=wanted}currentAudio.volume=.42;currentAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music')}).catch(()=>showToast('Tap the music button whenever you are ready'))}
 function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
 function toggleMusic(){if(playing){currentAudio.pause();playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')}else startMusic()}
