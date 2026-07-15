@@ -1,4 +1,5 @@
 const scenes=[...document.querySelectorAll('.scene')];
+const introAudio=document.querySelector('#introSong');
 const audio=document.querySelector('#birthdaySong');
 const musicToggle=document.querySelector('#musicToggle');
 const progressFill=document.querySelector('#progressFill');
@@ -7,7 +8,7 @@ const backBtn=document.querySelector('#backBtn');
 const canvas=document.querySelector('#confetti');
 const ctx=canvas.getContext('2d');
 const toast=document.querySelector('#toast');
-let current=0,playing=false,particles=[];
+let current=0,playing=false,currentAudio=introAudio,particles=[];
 
 const birthdayCountdown=document.querySelector('#birthdayCountdown');
 function renderBirthdayCountdown(){const now=new Date();let year=now.getFullYear(),target=new Date(year,6,23,0,0,0),end=new Date(year,6,24,0,0,0);if(now>=target&&now<end){birthdayCountdown.className='birthday-countdown is-today';birthdayCountdown.textContent='✦ Nandini’s day is here ✦';return}if(now>=end)target=new Date(year+1,6,23,0,0,0);const distance=Math.max(0,target-now),days=Math.floor(distance/86400000),hours=Math.floor(distance/3600000)%24,minutes=Math.floor(distance/60000)%60;birthdayCountdown.className='birthday-countdown';birthdayCountdown.innerHTML=`<span><b>${String(days).padStart(2,'0')}</b><small>days</small></span><span><b>${String(hours).padStart(2,'0')}</b><small>hours</small></span><span><b>${String(minutes).padStart(2,'0')}</b><small>minutes</small></span>`}
@@ -17,10 +18,14 @@ function sizeCanvas(){const d=Math.min(devicePixelRatio||1,2);canvas.width=inner
 function burst(x=innerWidth/2,y=innerHeight/2,count=70,hearts=false){const colors=['#f8b5ca','#fff1db','#f1be69','#c64d79','#fff'];for(let i=0;i<count;i++)particles.push({x,y,vx:(Math.random()-.5)*10,vy:-3-Math.random()*7,g:.12+Math.random()*.1,life:65+Math.random()*50,size:3+Math.random()*7,color:colors[i%colors.length],heart:hearts&&i%3===0,rot:Math.random()*6})}
 function animate(){ctx.clearRect(0,0,innerWidth,innerHeight);particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;p.rot+=.12;ctx.save();ctx.globalAlpha=Math.min(1,p.life/40);ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;if(p.heart){ctx.font=`${p.size*3}px serif`;ctx.fillText('♡',-p.size,-p.size)}else ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.65);ctx.restore()});requestAnimationFrame(animate)}
 function showToast(message){toast.textContent=message;toast.classList.add('is-visible');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('is-visible'),2200)}
-function startMusic(){audio.volume=.42;audio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music')}).catch(()=>showToast('Tap the music button whenever you are ready ♡'))}
-function toggleMusic(){if(playing){audio.pause();playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')}else startMusic()}
+function musicForScene(index=current){return index<2?introAudio:audio}
+function startMusic(){const wanted=musicForScene();if(currentAudio!==wanted){currentAudio.pause();currentAudio=wanted}currentAudio.volume=.42;currentAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music')}).catch(()=>showToast('Tap the music button whenever you are ready'))}
+function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
+function toggleMusic(){if(playing){currentAudio.pause();playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')}else startMusic()}
+scenes.forEach((scene,index)=>new MutationObserver(()=>{if(scene.classList.contains('is-active'))syncMusic(index)}).observe(scene,{attributes:true,attributeFilter:['class']}));
 function goTo(index){if(index<0||index>=scenes.length||index===current)return;prepareScene(index);const old=scenes[current],next=scenes[index];old.classList.add('is-leaving');setTimeout(()=>{old.hidden=true;old.classList.remove('is-active','is-leaving');next.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('is-active')));current=index;backBtn.hidden=index===0;chapterCount.textContent=String(index+1).padStart(2,'0')+' / '+String(scenes.length).padStart(2,'0');progressFill.style.width=((index+1)/scenes.length*100)+'%';if(index===3)setTimeout(()=>document.querySelector('#bouquet').classList.add('is-bloomed'),500);if(index===6)burst(innerWidth/2,innerHeight*.55,150,true)},620)}
 const beginBtn=document.querySelector('#beginBtn'),secretLock=document.querySelector('#secretLock'),secretCode=document.querySelector('#secretCode'),lockStatus=document.querySelector('#lockStatus');
+document.addEventListener('pointerdown',()=>{if(current===0&&!playing)startMusic()},{once:true});
 secretCode.addEventListener('input',()=>{secretCode.value=secretCode.value.replace(/\D/g,'').slice(0,4);secretLock.classList.remove('is-wrong')});
 secretLock.addEventListener('submit',event=>{event.preventDefault();if(secretCode.value==='2307'){secretLock.classList.add('is-unlocked');lockStatus.textContent='Correct — welcome to Nandini’s little universe ♡';secretCode.disabled=true;secretLock.querySelector('button').disabled=true;burst(innerWidth*.24,innerHeight*.72,70,true);setTimeout(()=>{secretLock.hidden=true;beginBtn.hidden=false;beginBtn.focus()},700)}else{secretLock.classList.remove('is-wrong');secretLock.offsetHeight;secretLock.classList.add('is-wrong');lockStatus.textContent='Not quite… think of her special date ♡';secretCode.focus();secretCode.select()}});
 beginBtn.addEventListener('click',()=>{startMusic();burst(innerWidth*.5,innerHeight*.55,100,true);setTimeout(()=>goTo(1),350)});
