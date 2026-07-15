@@ -135,3 +135,68 @@
 .finale-stars{pointer-events:none!important}
 .finale-inner{position:relative;z-index:2;pointer-events:auto}
 .finale-inner .love-button,.finale-inner .love-machine{position:relative;z-index:3;pointer-events:auto!important}
+
+/* iPhone / small-screen layout: every chapter may scroll and every action stays reachable. */
+@media (max-width:760px){
+  html,body{width:100%;height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
+  body{min-height:100dvh}
+  .topbar{height:58px;padding:env(safe-area-inset-top) 13px 0;mix-blend-mode:normal;background:linear-gradient(180deg,rgba(49,12,30,.58),transparent);color:#fff}
+  .brand:after{content:"Nandini's universe";font-size:8px;white-space:nowrap}.top-actions{position:absolute;right:13px;gap:7px;flex-shrink:0}.back-button{height:34px;padding:0 8px 0 5px}.back-button b{width:22px;height:22px}.back-button span{font-size:8px}.icon-button{width:34px;height:34px;flex:0 0 34px}
+  .scene{height:100dvh;min-height:100dvh;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+  .scene-inner{width:calc(100% - 28px);height:auto;min-height:100dvh;padding:calc(72px + env(safe-area-inset-top)) 0 calc(34px + env(safe-area-inset-bottom));align-items:center}
+  .scene h2{font-size:clamp(37px,11.5vw,52px);line-height:.98;letter-spacing:-.025em}
+  .scene-lead{font-size:13px;line-height:1.55}.eyebrow{font-size:9px;line-height:1.35;margin-bottom:10px}
+  .primary-button,.love-button{max-width:calc(100vw - 32px);padding-left:18px;gap:12px;min-height:48px}.primary-button b,.love-button b{flex:0 0 36px;width:36px;height:36px}
+
+  /* Password / opening chapter. */
+  .scene--hero{display:flex;align-items:stretch}
+  .hero-backdrop{background-position:60% center}.hero-shade{background:linear-gradient(180deg,rgba(41,10,26,.72),rgba(47,12,29,.28) 44%,rgba(39,9,24,.9))}
+  .hero-copy{position:relative;left:auto;right:auto;top:auto;transform:none;width:100%;min-height:100dvh;padding:calc(72px + env(safe-area-inset-top)) 18px calc(92px + env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center;text-align:center}
+  .hero-copy h1{font-size:clamp(40px,11.6vw,54px);line-height:.92;margin:0 0 14px;white-space:normal}.hero-copy h1 em{display:block;font-size:1.18em;line-height:1;margin:6px 0 0}
+  .hero-note{font-size:12px;line-height:1.5;margin:0 auto 14px;max-width:350px}.birthday-countdown{justify-content:center;flex-wrap:wrap;margin-bottom:12px}.birthday-countdown span{min-width:48px;padding:6px 7px}.birthday-countdown b{font-size:19px}
+  .secret-lock{margin-inline:auto;padding:11px 12px 9px;border-radius:15px}.secret-lock__heading{margin-bottom:8px}.secret-lock__heading>span{width:28px;height:28px}.secret-lock__heading b{font-size:12px}.secret-lock__heading small{font-size:7px}.secret-lock input{width:118px;height:42px;font-size:20px}.secret-lock__controls button{height:42px}.hero-question{bottom:calc(12px + env(safe-area-inset-bottom));font-size:12px;pointer-events:none}
+
+  /* Balloon game remains a compact two-by-two board. */
+  .scene--balloons .scene-inner{justify-content:flex-start;padding-top:calc(78px + env(safe-area-inset-top));padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+  .scene--balloons h2{font-size:clamp(38px,11vw,49px)}.scene--balloons .scene-lead{margin:8px auto 0}
+  .balloon-game{grid-template-columns:repeat(2,78px);gap:37px 38px;height:300px;margin:12px auto 0}.balloon{width:76px;height:98px}.balloon:after{height:35px;bottom:-39px}.word-reveal{flex-wrap:wrap;gap:7px;font-size:30px;line-height:1.05;min-height:40px}.scene--balloons .next-button{margin-top:8px}
+
+  /* The wish ritual becomes a naturally scrolling vertical story. */
+  .wish-layout{justify-content:flex-start;gap:4px;text-align:center;padding-top:calc(76px + env(safe-area-inset-top));padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+  .wish-copy{width:100%}.wish-copy h2,.scene--wish .wish-copy h2{font-size:clamp(38px,11vw,48px);line-height:1}.wish-copy h2 em{margin-top:4px}.wish-copy .scene-lead{max-width:350px;margin:8px auto}
+  .ritual-steps{justify-content:center;gap:5px;margin:10px 0 5px}.ritual-steps span{padding:6px 8px;font-size:8px}.wish-star{flex:0 0 54px;width:54px;height:54px;margin-top:3px}.hold-hint{margin:3px 0 0}
+  .cake-stage{flex:0 0 370px;width:440px;height:500px;transform:scale(.7);transform-origin:top center;margin:3px auto -142px}.wish-moon{width:340px;height:340px}.cake-magic{inset:55px 35px 150px}.blow-actions{margin-top:17px}.wish-status{margin-top:7px}
+  .wish-complete{position:fixed;padding:calc(70px + env(safe-area-inset-top)) 22px calc(30px + env(safe-area-inset-bottom));overflow-y:auto}.wish-complete h3{font-size:clamp(36px,11vw,50px);line-height:1.05}.wish-complete p{line-height:1.5}
+
+  /* Bouquet content and button are in normal flow, never behind the viewport. */
+  .bouquet-layout{justify-content:flex-start;padding-top:calc(76px + env(safe-area-inset-top));padding-bottom:120px;gap:0}.bouquet-copy h2{font-size:clamp(38px,11vw,48px);line-height:1}.bouquet-copy h2 em{margin-top:4px}.quote-card{width:100%;min-height:82px;margin:12px auto 0;padding:12px 15px}.quote-card blockquote{font-size:15px;line-height:1.35;margin:6px 0}.bouquet{flex:0 0 405px;width:430px;height:570px;transform:scale(.63) rotate(2deg);transform-origin:top center;margin:7px auto -205px}.floating-next{position:fixed;z-index:10;bottom:calc(14px + env(safe-area-inset-bottom));max-width:calc(100vw - 26px);white-space:nowrap}
+
+  /* Memory museum: reserve a real bottom lane for the exit action. */
+  .scene--memories{padding:calc(72px + env(safe-area-inset-top)) 0 calc(94px + env(safe-area-inset-bottom));display:flex;flex-direction:column}
+  .memory-head{width:calc(100% - 28px);flex:0 0 auto}.memory-head h2{font-size:clamp(34px,10vw,43px);line-height:1}.film-strip{flex:1 1 auto;width:100%;height:auto;min-height:0;max-height:none;padding:18px 14vw 24px;align-items:stretch}
+  .film-strip figure{flex:0 0 min(74vw,300px);height:100%;min-height:0;max-height:520px;padding:9px 9px 10px}.film-strip figcaption{font-size:14px;flex-basis:34px;padding-top:8px}
+  .memory-footer{position:fixed;z-index:12;left:0;right:0;bottom:0;width:100%;min-height:78px;padding:8px 12px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,#3f1428 70%,transparent);justify-content:center}.memory-footer>span{display:none}.memory-footer .primary-button{pointer-events:auto}
+
+  /* Full-photo viewer: large close targets, photo centered, arrows at the bottom. */
+  .photo-modal{position:fixed;inset:0;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) 56px;gap:8px;padding:calc(76px + env(safe-area-inset-top)) 14px calc(12px + env(safe-area-inset-bottom))}
+  .photo-spotlight{grid-column:1/-1;grid-row:1;gap:7px;width:100%;min-height:0}.photo-spotlight img{max-width:100%;width:auto;height:100%;border-width:7px}.photo-spotlight p{font-size:16px}.photo-back{left:12px;top:calc(14px + env(safe-area-inset-top));height:42px;padding:0 12px}.photo-back span{font-size:9px}.photo-close{right:12px;top:calc(14px + env(safe-area-inset-top));height:42px;padding:0 12px;font-size:20px}.photo-close span{font-size:9px}.photo-arrow{width:52px;height:46px;border-radius:999px}.photo-arrow--prev{grid-column:1;grid-row:2}.photo-arrow--next{grid-column:2;grid-row:2}
+
+  /* Letter and finale also scroll when browser chrome reduces usable height. */
+  .letter-layout{justify-content:flex-start;padding-top:calc(78px + env(safe-area-inset-top));padding-bottom:calc(45px + env(safe-area-inset-bottom));gap:8px}.letter-intro h2{font-size:clamp(37px,10.5vw,47px);line-height:1}.letter-intro h2 em{display:inline-block;line-height:1.03;margin-top:4px}.letter-intro .scene-lead{font-size:12px;margin:9px auto}.envelope{flex:0 0 225px;width:330px;height:225px;margin:28px auto 42px;transform:scale(.86);transform-origin:top center}
+  .letter-modal{position:fixed;padding:calc(62px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))}.letter-paper{width:100%;height:100%;padding:48px 21px 28px}.typed-letter{font-size:16px;line-height:1.6;min-height:0}.letter-next{float:none;margin:12px auto 0}
+  .finale-inner{justify-content:flex-start;width:calc(100% - 28px);padding-top:calc(82px + env(safe-area-inset-top));padding-bottom:calc(70px + env(safe-area-inset-bottom))}.finale-inner h2{font-size:clamp(39px,11vw,52px);line-height:1}.finale-inner h2 em{display:block;line-height:1.04;margin-top:5px}.finale-inner>p:not(.eyebrow){width:100%;font-size:13px;line-height:1.5}.love-button{margin-top:10px}.love-machine{width:100%;margin-top:12px}.made-with{position:fixed;bottom:calc(8px + env(safe-area-inset-bottom));padding:0 12px;font-size:7px;pointer-events:none}
+}
+
+/* Extra-short phones and landscape browser windows. */
+@media (max-width:760px) and (max-height:700px){
+  .hero-copy{justify-content:flex-start;padding-top:68px}.hero-copy h1{font-size:44px}.hero-question{display:none}
+  .birthday-countdown{display:none}.scene--balloons .scene-inner{padding-top:66px}.balloon-game{height:270px;transform:scale(.9);margin:-2px auto -14px}
+  .wish-layout,.bouquet-layout,.letter-layout,.finale-inner{padding-top:68px}.cake-stage{transform:scale(.62);margin-bottom:-184px}
+}
+
+@media (max-width:760px){
+  .scene-inner>*,.memory-head>*,.memory-footer>*{min-width:0}
+  .scene h1,.scene h2,.scene p,.quote-card,.love-machine{max-width:100%;overflow-wrap:break-word}
+  .memory-head h2 em{display:block}
+  .finale-inner h2{font-size:clamp(34px,9.7vw,46px)}
+}
