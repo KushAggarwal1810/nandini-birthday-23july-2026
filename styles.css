@@ -25,6 +25,7 @@
 .wish-star--ready .wish-star__ring{clip-path:inset(0);animation:pulseRing 1.8s ease-in-out infinite}
 .blow-button--ready{background:#fff;color:var(--wine);border-color:#fff;font-weight:700;padding:14px 24px;box-shadow:0 12px 28px rgba(20,2,10,.28)}
 .blow-button--ready:hover{transform:translateY(-2px)}
+.blow-button--ready{position:relative;overflow:hidden}.blow-button--ready:after{content:"";position:absolute;inset:-50% auto -50% -40%;width:34%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);transform:rotate(18deg);animation:buttonWishGlow 2.8s ease-in-out infinite}@keyframes buttonWishGlow{55%,100%{left:130%}}
 @keyframes pulseRing{50%{transform:scale(1.12);opacity:.45}}
 
 /* Keep display-script flourishes in their own safe line boxes. */
