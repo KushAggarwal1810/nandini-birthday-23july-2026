@@ -1,6 +1,7 @@
 const scenes=[...document.querySelectorAll('.scene')];
 const introAudio=document.querySelector('#introSong');
 const audio=document.querySelector('#birthdaySong');
+const cakeAudio=document.querySelector('#cakeSong');
 const finaleAudio=document.querySelector('#finaleSong');
 const expectationAudio=document.querySelector('#expectationSong');
 const musicToggle=document.querySelector('#musicToggle');
@@ -10,7 +11,9 @@ const backBtn=document.querySelector('#backBtn');
 const canvas=document.querySelector('#confetti');
 const ctx=canvas.getContext('2d');
 const toast=document.querySelector('#toast');
-let current=0,playing=false,currentAudio=introAudio,expectationUnlocked=false,particles=[];
+const cakeTracks=['assets/birthday-song-01.mp3','assets/birthday-song-02.mp3','assets/birthday-song-03.mp3','assets/birthday-song-04.mp3'];
+const cakeTrackLabel=document.querySelector('#cakeTrackLabel');
+let current=0,playing=false,currentAudio=introAudio,expectationUnlocked=false,cakeTrackIndex=0,particles=[];
 
 const birthdayCountdown=document.querySelector('#birthdayCountdown');
 function renderBirthdayCountdown(){const now=new Date();let year=now.getFullYear(),target=new Date(year,6,23,0,0,0),end=new Date(year,6,24,0,0,0);if(now>=target&&now<end){birthdayCountdown.className='birthday-countdown is-today';birthdayCountdown.textContent='✦ IT’S TIME NOW!! HAPPY BIRTHDAY, NANDINI ✦';return}if(now>=end)target=new Date(year+1,6,23,0,0,0);const today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),days=Math.max(1,Math.round((target-today)/86400000));birthdayCountdown.className='birthday-countdown birthday-countdown--days';birthdayCountdown.innerHTML=`<span><b>${String(days).padStart(2,'0')}</b><small>${days===1?'day':'days'} to go</small></span>`}
@@ -20,11 +23,12 @@ function sizeCanvas(){const d=Math.min(devicePixelRatio||1,2);canvas.width=inner
 function burst(x=innerWidth/2,y=innerHeight/2,count=70,hearts=false){const colors=['#f8b5ca','#fff1db','#f1be69','#c64d79','#fff'];for(let i=0;i<count;i++)particles.push({x,y,vx:(Math.random()-.5)*10,vy:-3-Math.random()*7,g:.12+Math.random()*.1,life:65+Math.random()*50,size:3+Math.random()*7,color:colors[i%colors.length],heart:hearts&&i%3===0,rot:Math.random()*6})}
 function animate(){ctx.clearRect(0,0,innerWidth,innerHeight);particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.life--;p.rot+=.12;ctx.save();ctx.globalAlpha=Math.min(1,p.life/40);ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;if(p.heart){ctx.font=`${p.size*3}px serif`;ctx.fillText('♡',-p.size,-p.size)}else ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.65);ctx.restore()});requestAnimationFrame(animate)}
 function showToast(message){toast.textContent=message;toast.classList.add('is-visible');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('is-visible'),2200)}
-function musicForScene(index=current){return index<2?introAudio:index===6?(expectationUnlocked?expectationAudio:finaleAudio):audio}
+function musicForScene(index=current){return index<2?introAudio:index===2?cakeAudio:index===6?(expectationUnlocked?expectationAudio:finaleAudio):audio}
 function startMusic(){const wanted=musicForScene();if(currentAudio!==wanted){currentAudio.pause();currentAudio=wanted}currentAudio.volume=.42;currentAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music')}).catch(()=>showToast('Tap the music button whenever you are ready'))}
-function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
+function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();if(index===2){cakeTrackIndex=0;cakeAudio.src=cakeTracks[0];cakeTrackLabel.textContent='1 / '+cakeTracks.length}currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
 function toggleMusic(){if(playing){currentAudio.pause();playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')}else startMusic()}
 scenes.forEach((scene,index)=>new MutationObserver(()=>{if(scene.classList.contains('is-active'))syncMusic(index)}).observe(scene,{attributes:true,attributeFilter:['class']}));
+cakeAudio.addEventListener('ended',()=>{if(current!==2)return;cakeTrackIndex=(cakeTrackIndex+1)%cakeTracks.length;cakeAudio.src=cakeTracks[cakeTrackIndex];cakeTrackLabel.textContent=(cakeTrackIndex+1)+' / '+cakeTracks.length;cakeAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing')})});
 function goTo(index){if(index<0||index>=scenes.length||index===current)return;prepareScene(index);const old=scenes[current],next=scenes[index];old.classList.add('is-leaving');setTimeout(()=>{old.hidden=true;old.classList.remove('is-active','is-leaving');next.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('is-active')));current=index;backBtn.hidden=index===0;chapterCount.textContent=String(index+1).padStart(2,'0')+' / '+String(scenes.length).padStart(2,'0');progressFill.style.width=((index+1)/scenes.length*100)+'%';if(index===3)setTimeout(()=>document.querySelector('#bouquet').classList.add('is-bloomed'),500);if(index===6)burst(innerWidth/2,innerHeight*.55,150,true)},620)}
 const beginBtn=document.querySelector('#beginBtn'),secretLock=document.querySelector('#secretLock'),secretCode=document.querySelector('#secretCode'),lockStatus=document.querySelector('#lockStatus');
 document.addEventListener('pointerdown',()=>{if(current===0&&!playing)startMusic()},{once:true});
