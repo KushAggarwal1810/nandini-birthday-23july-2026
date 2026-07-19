@@ -85,6 +85,7 @@
 .birthday-countdown b{display:block;font-family:var(--serif);font-size:22px;font-weight:400;line-height:1}
 .birthday-countdown small{display:block;margin-top:3px;font-size:7px;letter-spacing:.13em;text-transform:uppercase;color:#ffe6ed}
 .birthday-countdown.is-today{font-family:var(--hand);font-size:19px;color:#ffd6e2}
+.birthday-countdown.birthday-countdown--days span{min-width:158px;padding:10px 18px;border-color:rgba(242,192,113,.62);box-shadow:0 8px 24px rgba(43,8,25,.16)}.birthday-countdown.birthday-countdown--days b{font-size:30px;color:#fff3d5}.birthday-countdown.birthday-countdown--days small{font-size:8px;color:#fff;letter-spacing:.18em}
 
 /* A fuller, more magical birthday cake. */
 .cake-stage{isolation:isolate}
