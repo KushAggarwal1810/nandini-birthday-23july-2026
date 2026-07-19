@@ -12,7 +12,7 @@ const canvas=document.querySelector('#confetti');
 const ctx=canvas.getContext('2d');
 const toast=document.querySelector('#toast');
 const cakeTracks=['assets/birthday-song-01.mp3','assets/birthday-song-02.mp3','assets/birthday-song-03.mp3','assets/birthday-song-04.mp3'];
-const cakeTrackLabel=document.querySelector('#cakeTrackLabel');
+const cakeTrackLabels=[...document.querySelectorAll('[data-cake-track-label]')];
 let current=0,playing=false,currentAudio=introAudio,expectationUnlocked=false,cakeTrackIndex=0,particles=[];
 
 const birthdayCountdown=document.querySelector('#birthdayCountdown');
@@ -25,12 +25,13 @@ function animate(){ctx.clearRect(0,0,innerWidth,innerHeight);particles=particles
 function showToast(message){toast.textContent=message;toast.classList.add('is-visible');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('is-visible'),2200)}
 function musicForScene(index=current){return index<2?introAudio:index===2?cakeAudio:index===6?(expectationUnlocked?expectationAudio:finaleAudio):audio}
 function startMusic(){const wanted=musicForScene();if(currentAudio!==wanted){currentAudio.pause();currentAudio=wanted}currentAudio.volume=.42;currentAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music')}).catch(()=>showToast('Tap the music button whenever you are ready'))}
-function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();if(index===2){cakeTrackIndex=0;cakeAudio.src=cakeTracks[0];cakeTrackLabel.textContent='1 / '+cakeTracks.length}currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
+function updateCakeTrackLabels(){cakeTrackLabels.forEach(label=>label.textContent=(cakeTrackIndex+1)+' / '+cakeTracks.length)}
+function syncMusic(index){const wanted=musicForScene(index);if(currentAudio===wanted)return;const shouldResume=playing;currentAudio.pause();if(index===2){cakeTrackIndex=0;cakeAudio.src=cakeTracks[0];updateCakeTrackLabels()}currentAudio=wanted;currentAudio.volume=.42;if(shouldResume)currentAudio.play().catch(()=>{playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')})}
 function toggleMusic(){if(playing){currentAudio.pause();playing=false;musicToggle.classList.remove('is-playing');musicToggle.setAttribute('aria-label','Play music')}else startMusic()}
 scenes.forEach((scene,index)=>new MutationObserver(()=>{if(scene.classList.contains('is-active'))syncMusic(index)}).observe(scene,{attributes:true,attributeFilter:['class']}));
-function changeCakeSong(fromButton=false){if(current!==2)return;cakeTrackIndex=(cakeTrackIndex+1)%cakeTracks.length;cakeAudio.src=cakeTracks[cakeTrackIndex];cakeTrackLabel.textContent=(cakeTrackIndex+1)+' / '+cakeTracks.length;if(fromButton||playing){currentAudio=cakeAudio;cakeAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music');if(fromButton)showToast('Birthday song '+(cakeTrackIndex+1)+' of '+cakeTracks.length+' ♫')}).catch(()=>{playing=false;musicToggle.classList.remove('is-playing')})}}
+function changeCakeSong(fromButton=false){if(current!==2)return;cakeTrackIndex=(cakeTrackIndex+1)%cakeTracks.length;cakeAudio.src=cakeTracks[cakeTrackIndex];updateCakeTrackLabels();if(fromButton||playing){currentAudio=cakeAudio;cakeAudio.play().then(()=>{playing=true;musicToggle.classList.add('is-playing');musicToggle.setAttribute('aria-label','Pause music');if(fromButton)showToast('Birthday song '+(cakeTrackIndex+1)+' of '+cakeTracks.length+' ♫')}).catch(()=>{playing=false;musicToggle.classList.remove('is-playing')})}}
 cakeAudio.addEventListener('ended',()=>changeCakeSong());
-document.querySelector('#cakeTrackBtn').addEventListener('click',()=>changeCakeSong(true));
+document.querySelectorAll('[data-cake-song]').forEach(button=>button.addEventListener('click',()=>changeCakeSong(true)));
 function goTo(index){if(index<0||index>=scenes.length||index===current)return;prepareScene(index);const old=scenes[current],next=scenes[index];old.classList.add('is-leaving');setTimeout(()=>{old.hidden=true;old.classList.remove('is-active','is-leaving');next.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('is-active')));current=index;backBtn.hidden=index===0;chapterCount.textContent=String(index+1).padStart(2,'0')+' / '+String(scenes.length).padStart(2,'0');progressFill.style.width=((index+1)/scenes.length*100)+'%';if(index===3)setTimeout(()=>document.querySelector('#bouquet').classList.add('is-bloomed'),500);if(index===6)burst(innerWidth/2,innerHeight*.55,150,true)},620)}
 const beginBtn=document.querySelector('#beginBtn'),secretLock=document.querySelector('#secretLock'),secretCode=document.querySelector('#secretCode'),lockStatus=document.querySelector('#lockStatus');
 document.addEventListener('pointerdown',()=>{if(current===0&&!playing)startMusic()},{once:true});
