@@ -103,7 +103,7 @@ The way you care.
 Those things don't make the loudest noise...
 but they leave the biggest impact.
 
-I don't think you even realize how many people probably walk away from conversations with you feeling a little lighter than before.
+I don't think you even realize how often I walk away from conversations with you feeling a little lighter than before.
 
 And that's a superpower.
 
@@ -164,7 +164,7 @@ The kind where your heart feels light.
 
 The kind where you laugh so hard your stomach hurts.
 
-The kind where random Tuesdays become your favorite memories.
+The kind where random Thursdays become your favorite memories.
 
 And I hope life starts surprising you with beautiful things when you least expect them.
 
