@@ -79,10 +79,155 @@ memoryFigures.forEach((figure,index)=>{figure.addEventListener('pointerdown',()=
 document.querySelector('#photoClose').addEventListener('click',closePhoto);document.querySelector('#photoBack').addEventListener('click',closePhoto);document.querySelector('#photoPrev').addEventListener('click',()=>movePhoto(-1));document.querySelector('#photoNext').addEventListener('click',()=>movePhoto(1));photoModal.addEventListener('click',event=>{if(event.target===photoModal)closePhoto()});
 document.addEventListener('keydown',e=>{if(photoModal.hidden)return;if(e.key==='Escape')closePhoto();if(e.key==='ArrowLeft')movePhoto(-1);if(e.key==='ArrowRight')movePhoto(1)});
 
-const letterText=`Dear Nandini,\n\nHappy birthday to the person who has this beautiful habit of making ordinary days feel important just by being there.\n\nI hope you know how special you truly are—not only today, when everyone is reminding you, but on the quiet days too. You have a heart that makes people feel seen, a smile that can fix moods without even trying, and a presence that turns little moments into the memories we keep.\n\nThank you for being my safe place, my partner in nonsense, my unpaid therapist, and the best friend I could have asked life for. With you, laughter is louder, problems feel lighter, and even silence feels comfortable.\n\nOn your birthday, I wish I could hand you every bit of happiness you have unknowingly given the people around you. I hope this year is gentle with your heart, loud with your laughter, and full of the kind of magic you secretly wish for. May every dream you are scared to say out loud find its way to you.\n\nAnd whenever you doubt yourself, please remember: you are deeply loved, ridiculously precious, and completely irreplaceable. There is only one you—and I am so, so lucky that I get to call her my best friend.\n\nHappy Birthday, meri pyaari Nandini. Never shrink your sparkle. The world is much prettier with you in it. ♡`;
+const letterText=`Dear Nandini,
+
+Happy Birthday, birthday girl. 🤍🎂
+
+Before today becomes all about cakes, candles, Instagram stories, and everyone fighting over who gets to wish you first... I wanted to steal a few minutes and remind you of something.
+
+Tu na... genuinely bahut acchi hai.
+
+And I don't mean the "nice" people casually call everyone.
+
+I mean the kind of person who makes others feel comfortable just by being around them. The kind who listens without making people feel judged. The kind who remembers little things that everyone else forgets.
+
+Honestly... that's rare.
+
+People often notice beauty, talent, achievements...
+But very few people notice the quiet things that actually make someone special.
+
+Your kindness.
+Your patience.
+The way you care.
+
+Those things don't make the loudest noise...
+but they leave the biggest impact.
+
+I don't think you even realize how many people probably walk away from conversations with you feeling a little lighter than before.
+
+And that's a superpower.
+
+Thank you...
+
+For being my partner in nonsense.
+
+For listening to my random overthinking sessions.
+
+For tolerating my terrible jokes (even though you'll never admit they're funny 😒😂).
+
+For all the times you somehow made ordinary conversations become memories.
+
+Thank you for simply being...
+
+you.
+
+There's something I've always wanted to tell you...
+
+I hope one day you see yourself the way the people who genuinely care about you see you.
+
+Because I honestly don't think you give yourself enough credit.
+
+You're stronger than you think.
+
+Kinder than you realize.
+
+And more appreciated than you'll probably ever know.
+
+Life has definitely tested you at times...
+yet somehow you never let it take away the softness of your heart.
+
+Please never lose that.
+
+The world already has enough people pretending to be kind.
+
+It needs more people who simply are.
+
+Aur haan...
+
+Kabhi kabhi thoda khud ka bhi khayal rakh liya kar. 😒
+
+Har baar sabki tension lene ka contract sirf tune hi sign nahi kiya hai.
+
+You deserve the same love, patience and care that you so effortlessly give everyone else.
+
+My biggest wish for you isn't money...
+
+or success...
+
+or even achieving every goal on your list.
+
+I just hope this year gives you peace.
+
+The kind where you sleep without overthinking.
+
+The kind where your heart feels light.
+
+The kind where you laugh so hard your stomach hurts.
+
+The kind where random Tuesdays become your favorite memories.
+
+And I hope life starts surprising you with beautiful things when you least expect them.
+
+Because if anyone deserves unexpected happiness...
+
+it's you.
+
+You know what's funny?
+
+People think birthdays are about getting older.
+
+I think they're about reminding someone how much they matter.
+
+So here's your reminder...
+
+You matter.
+
+More than you know.
+
+More than you believe.
+
+And definitely more than you'll ever admit. 😊
+
+Bas ek aur baat...
+
+Thank you for walking into my life.
+
+I genuinely don't know if I'll ever be able to explain how grateful I am that our paths crossed.
+
+You're one of those people who quietly become important without even realizing it.
+
+And that's my favorite thing about you.
+
+Now enough emotional damage. 😤😂
+
+Go eat cake.
+
+Take a million pictures (haan, mujhe bhi 2–3 bhej diyo—thoda main bhi khush ho jaunga).
+
+Enjoy every second.
+
+Aur haan...
+
+Aaj ke din overthinking bilkul allowed nahi hai.
+
+Sirf smile karna, khush rehna aur apni VIP treatment enjoy karna. 😌👑
+
+Happy Birthday, meri pyaari Nandini. 🤍
+
+Stay exactly the way you are.
+
+Because the world doesn't need another perfect person...
+
+It simply needs more people like you.
+
+Always cheering for you,
+
+– Your partner in nonsense (Your best friend applicant...) 🤍
+
+P.S. Thanks for existing. 🤍`;
 const envelope=document.querySelector('#envelope'),modal=document.querySelector('#letterModal'),typed=document.querySelector('#typedLetter');let typedOnce=false;
 envelope.addEventListener('click',()=>{envelope.classList.add('is-open');setTimeout(()=>{modal.classList.add('is-visible');modal.setAttribute('aria-hidden','false');if(!typedOnce)typeLetter()},850)});
-function typeLetter(){typedOnce=true;let i=0;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const step=()=>{typed.textContent=letterText.slice(0,i);i+=reduce?20:2;if(i<=letterText.length)setTimeout(step,reduce?1:16);else{typed.textContent=letterText;document.querySelector('#letterSign').hidden=false;document.querySelector('#letterNext').hidden=false;burst(innerWidth*.7,innerHeight*.8,55,true)}};step()}
+function typeLetter(){typedOnce=true;let i=0;const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;const step=()=>{typed.textContent=letterText.slice(0,i);i+=reduce?40:4;if(i<=letterText.length)setTimeout(step,reduce?1:10);else{typed.textContent=letterText;document.querySelector('#letterNext').hidden=false;burst(innerWidth*.7,innerHeight*.8,55,true)}};step()}
 document.querySelector('#closeLetter').addEventListener('click',()=>{modal.classList.remove('is-visible');modal.setAttribute('aria-hidden','true')});
 const loveBtn=document.querySelector('#loveBtn'),loveMachine=document.querySelector('#loveMachine'),loveMeter=document.querySelector('#loveMeter'),loveLevel=document.querySelector('#loveLevel'),loveWish=document.querySelector('#loveWish');const birthdayWishes=['May your smile always come back twice as bright.','May every quiet dream in your heart find its way to you.','May this year bring soft days, loud laughter and safe love.','May you always see yourself through the eyes of people who adore you.','May 23 July keep returning with more magic than the year before.','May every ordinary day surprise you with one beautiful reason to smile.','May distance, time and busy days never change how deeply you are loved.','May the universe spoil you shamelessly—today and always.'];let loveClicks=0,infiniteLove=false,loveStormTimer;
 function rainLove(count){for(let i=0;i<count;i++){const heart=document.createElement('span');heart.className='heart-flood';heart.textContent=['♡','♥','✦','Happy Birthday!'][i%4];heart.style.left=Math.random()*100+'vw';heart.style.bottom=(-20-Math.random()*170)+'px';heart.style.color=['#ffd3df','#f5b1c7','#f1c06c','#fff'][i%4];heart.style.fontSize=i%4===3?(10+Math.random()*7)+'px':'';heart.style.animationDelay=Math.random()*.7+'s';document.body.appendChild(heart);setTimeout(()=>heart.remove(),4400)}}
